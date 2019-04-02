@@ -15,7 +15,8 @@ int getSize(char* inputfilename)
     int *columns_p = &columns;
     int i = 0;
     int errors = 0;
-    char* inv_char = calloc (1000,sizeof (inv_char));
+    //int* check = NULL;
+    char* inv_char = malloc (10*sizeof inv_char);
     printf("%s", inv_char);
 
 
@@ -30,7 +31,7 @@ int getSize(char* inputfilename)
         }
         c = getc(f);
     }
-
+    inv_char[errors] = '\0';
 
     rewind(f);
     if( errors != 0)                                                                               //attempt to read the size only if there aren't any invalid characters
@@ -40,6 +41,13 @@ int getSize(char* inputfilename)
     }
     else
     {
+
+      //  fscanf(f, "%d %d %d", &rows, &columns, &check);
+        //if(check != NULL)
+       // {
+          //  printf("Too many arguments.");
+        //}
+
         c = getc(f);
         while(isspace(c))
             c = getc(f);
