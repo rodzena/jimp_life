@@ -11,8 +11,8 @@ int getSize(char* inputfilename,int* r, int* c)
     char* temp_columns = malloc ( 10*sizeof (temp_columns) );
 
     int i = 0;
-    int errors = 0;
-    char* inv_char = malloc (10*sizeof inv_char);
+    int er_count = 0;
+    char* inv_char = malloc (5*sizeof inv_char);                //lokuje na wartosc; czy er_count => rozmiartablicy; inv_char realloc(inv_char, 2*er_count*sizeof char)
     int temp = getc(f);
 
 //check the validity of the characters in the first line
@@ -20,16 +20,16 @@ int getSize(char* inputfilename,int* r, int* c)
     {
         if( !(isdigit(temp)) && (!(isspace(temp))) )
         {
-            inv_char[errors] = temp;
-            errors++;
+            inv_char[er_count] = temp;
+            er_count++;
         }
         temp = getc(f);
     }
-    inv_char[errors] = '\0';
+    inv_char[er_count] = '\0';
     rewind(f);
 
 //attempt to read the size only if there aren't any invalid characters
-    if( errors != 0)
+    if( er_count != 0)
     {
         printf("Error occurred while reading the grid size. \nCharacters: %s are invalid and should not appear in the first line of the file.\n", inv_char);
         return 1;
@@ -79,6 +79,7 @@ int getSize(char* inputfilename,int* r, int* c)
             return 1;
         }
     }
+    fclose(f);
     return 0;
 }
 
@@ -87,33 +88,31 @@ void fillStatesMatrix (char* inputfilename, int* matrix, int* r, int* c)
 {
     int temp;
     FILE* f = fopen(inputfilename, "r");
+
+//skip the first line - the size is already loaded
     do
+    {
+        temp = getc(f);
+    }
+    while (temp != '\n');
+
+    for(int i = 0; i < *r; i++)
+    {
+        for(int j = 0; j < *c; j++)
         {
-            temp = getc(f);
-        }
-     while (temp != '\n');
-
-    //temp = getc(f);
-
-    //while (temp != -38) {
-      //  temp = getc(file) - 48;
-    //}
-
-    for(int i = 0; i < *r; i++) {
-        for(int j = 0; j < *c; j++) {
             temp = getc(f);
             *matrix = temp - '0';
             matrix++;
         }
         temp = getc(f);
+        if(tem !=)
     }
     fclose(f);
 }
 
 
 
-
-int main(int argc, char** argv)
+/*int main(int argc, char** argv)
 {
     int r=0;
     int c=0;
@@ -123,22 +122,20 @@ int main(int argc, char** argv)
     int smatrix[r][c];
     int* smatrix_p = &smatrix[0][0];
 
-
-
-
-
     if(!result)
         printf("%d %d\n", r, c);
 
     fillStatesMatrix ("test.txt", smatrix_p, &r, &c);
 
+
+//drukuje macierz 1 - docelowo w innej funkcji
     for (int i = 0; i<r; i++)
+    {
+        for (int j = 0; j<c; j++)
         {
-            for (int j = 0; j<c; j++)
-            {
-                printf("%d", smatrix[i][j]);
-            }
-            printf("\n");
+            printf("%d", smatrix[i][j]);
+        }
+        printf("\n");
 
     }
 
@@ -147,4 +144,5 @@ int main(int argc, char** argv)
 
     return 0;
 }
+*/
 
