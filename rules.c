@@ -1,12 +1,22 @@
 #include <stdio.h>
 #include "rules.h"
 
+int decideCellState(int* states, int* neighbours, int r, int c, int x, int y);
+
+void decideCellsState (int* states, int* neighbours, int r, int c) {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+           *(states + r * i + j)  = decideCellState(states, neighbours, r, c, i, j);
+        }
+    }
+}
+
 int decideCellState(int* states, int* neighbours, int r, int c, int x, int y) {
     int s = *(states + x * r + y);
     int n = *(neighbours + x * r + y);
     switch (s) {
         case (0):
-        if(n == 3)
+        if(n == 3) 
             return 1;
         else
             return 0;

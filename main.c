@@ -31,42 +31,11 @@ int main()
 
     if (fillResult == 0)
     {
-        printf("states matrix read from file:\n");
-        for(int i = 0; i < r; i++)
-        {
-            for(int j =0 ; j < c; j++)
-            {
-                printf("%d ", smatrix[i][j]);
-            }
-            printf("\n");
-        }
-
-        //filling neighbours matrix
-        generateNeighbours(smatrix_p, nmatrix_p, r, c);
-
-        //showing neighbours matrix
-        printf("neighbours matrix:\n");
-        for(int k = 0; k < r; k++)
-        {
-            for(int l =0 ; l < c; l++)
-            {
-                printf("%d ", nmatrix[k][l]);
-            }
-            printf("\n");
-        }
-        //overwriting states matrix with new generation
-        generateGeneration(smatrix_p, nmatrix_p, r, c);
-
-        //showing new generation matrix
-        printf("new neighbours matrix:\n");
-        for(int m = 0; m < r; m++)
-        {
-            for(int n = 0; n < c; n++)
-            {
-                printf("%d ", smatrix[m][n]);
-            }
-            printf("\n");
-        }
+        //filling states and neighbours matrix
+	fillStatesMatrix(inputfilename, psmatrix, r, c);
+	generateNeighbours(psmatrix, pnmatrix, r, c);
+	//processing generation
+	generateGeneration(psmatrix, pnmatrix, r, c, 1);
     }
     system("pause");
     return 0;
