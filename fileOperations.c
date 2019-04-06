@@ -83,32 +83,96 @@ int getSize(char* inputfilename,int* r, int* c)
     return 0;
 }
 
-
-void fillStatesMatrix (char* inputfilename, int* matrix, int* r, int* c)
+int fillStatesMatrix(char*inputfilename, int* matrix, int* r, int *c)
 {
-    int temp;
+    FILE* f = fopen(inputfilename, "r");
+
+    int temp = getc(f);
+
+    while (temp != '\n' && temp != EOF)
+        temp = getc(f);
+
+    temp = getc(f);
+
+    if ( temp != EOF)
+    {
+        for (int i = 0; i < *r; i++)
+        {
+            for (int j = 0; j < *c; j++)
+            {
+                if ( temp != EOF && temp != '\n')
+                {
+                    *matrix = (temp - '0');
+                    matrix++;
+                }
+                else
+                {
+                    printf("Line %d is too short. Make sure it contains %d characters.\n", i+1, *c);
+                    return 1;
+                }
+                 temp = getc(f);
+            }
+            printf("Po skonczeniu %d linii: %d\n",i+1, temp);
+            if (temp != '\n' && temp != EOF)
+            {
+                printf("Line %d is too long. Make sure it contains %d characters.\n", i+1, *c);
+                return 1;
+            }
+            else if (temp == EOF && i < *r -1)
+            {
+                printf("Not enough verses. Make sure there are %d verses.\n", *r);
+                return 1;
+            }
+            else if( temp == '\n' && i == *r-1)
+            {
+                printf("Too many rows. Make sure there are %d of them.\n", *r);
+                return 1;
+            }
+            else
+                temp = getc(f);
+        }
+    }
+    return 0;
+}
+
+/*void fillStatesMatrix (char* inputfilename, int* matrix, int* r, int* c)
+{
+    int c;
     FILE* f = fopen(inputfilename, "r");
 
 //skip the first line - the size is already loaded
     do
     {
-        temp = getc(f);
+        c = getc(f);
     }
-    while (temp != '\n');
+    while (c != '\n');
+    printf("znak nowego wiersza elko elkooooo %d", '\n' );
+
+
+    c = getc(f);
 
     for(int i = 0; i < *r; i++)
     {
         for(int j = 0; j < *c; j++)
         {
-            temp = getc(f);
-            *matrix = temp - '0';
-            matrix++;
+            while(c != '\n')
+            {
+                c = getc(f);
+                *matrix = c - '0';
+                matrix++;
+            }
         }
-        temp = getc(f);
-        if(tem !=)
+        c = getc(f);
+        printf("<<%c>>\n",c);
+        if(c != '\n')
+        {
+            printf("Loaded grid is of incorrect size. Line %d is too long. \nExpected length: %d\n",i+1,*r);
+        }
     }
     fclose(f);
 }
+*/
+
 
 
 
