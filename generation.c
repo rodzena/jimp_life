@@ -2,19 +2,25 @@
 #include "rules.c"
 
 int countNeighbours (int* states, int r, int c, int x, int y);
+void generateNeighbours (int* states, int* neighbours, int r, int c);
+void showMatrix (int* matrix, int r, int c);
+
+//  main procedure that handles generation processing
+void generateGeneration(int* states, int* neighbours, int r, int c, int n) {
+    printf("generacja:\n");
+    showMatrix(states, r, c);
+    printf("sasiedzi:\n");
+    showMatrix(neighbours, r, c);
+    decideCellsState(states, neighbours, r, c);
+    printf("nowa generacja:\n");
+    showMatrix(states, r, c);
+
+}
 
 void generateNeighbours (int* states, int* neighbours, int r, int c) {
     for(int i = 0; i < r; i++) {
         for(int j = 0; j < c; j++) {
             *(neighbours + r * i + j) = countNeighbours(states, r, c, i, j);
-        }
-    }
-}
-
-void generateGeneration(int* states, int* neighbours, int r, int c) {
-    for(int i = 0; i < r; i++) {
-        for(int j = 0; j < c; j++) {
-           *(states + r * i + j)  = decideCellState(states, neighbours, r, c, i, j);
         }
     }
 }
@@ -46,4 +52,13 @@ int countNeighbours (int* states, int r, int c, int x, int y) {
     if(x > 0)
         count += *(states + (x - 1) * r + y);
     return count;
+}
+
+void showMatrix (int* matrix, int r, int c) {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+           printf("%d ", *(matrix + r * i + j));
+        }
+    printf("\n");
+    }
 }

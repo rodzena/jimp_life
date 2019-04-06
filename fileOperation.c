@@ -20,7 +20,7 @@ void readFile (char* inputfilename, int* r, int* c) {
     fclose(file);
 }
 
-void fillStatesMatrix (char* inputfilename, int* matrix, int* r, int* c) {
+void fillStatesMatrix (char* inputfilename, int* matrix, int r, int c) {
     int temp;
     FILE* file = fopen(inputfilename, "r");
 
@@ -33,8 +33,8 @@ void fillStatesMatrix (char* inputfilename, int* matrix, int* r, int* c) {
         temp = getc(file) - 48;
     }
 
-    for(int i = 0; i < *r; i++) {
-        for(int j = 0; j < *c; j++) {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
             temp = getc(file) - 48;
             *matrix = temp;
             matrix++;
