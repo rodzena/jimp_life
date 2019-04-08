@@ -114,7 +114,7 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c)
                 }
                  temp = getc(f);
             }
-            printf("Po skonczeniu %d linii: %d\n",i+1, temp);
+            //printf("Po skonczeniu %d linii: %d\n",i+1, temp);
             if (temp != '\n' && temp != EOF)
             {
                 printf("Line %d is too long. Make sure it contains %d characters.\n", i+1, c);
