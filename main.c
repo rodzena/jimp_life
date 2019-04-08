@@ -3,11 +3,18 @@
 #include "fileOperations.h"
 #include "generation.h"
 #include "rules.h"
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 
 int main()
 {
     printf("Halko odbjur\n");
+
+
+
+
     //declaring variables
     char inputfilename[] = "test.txt";
     int r = 0, c = 0;
@@ -26,48 +33,35 @@ int main()
     int* nmatrix_p = &nmatrix[0][0];
 
     //filling states matrix
-    int fillResult = fillStatesMatrix(inputfilename, smatrix_p, &r, &c);
+    int fillResult = fillStatesMatrix(inputfilename, smatrix_p, r, c);
     //showing states matrix
+
 
     if (fillResult == 0)
     {
         printf("states matrix read from file:\n");
-        for(int i = 0; i < r; i++)
-        {
-            for(int j =0 ; j < c; j++)
-            {
-                printf("%d ", smatrix[i][j]);
-            }
-            printf("\n");
-        }
+        //showMatrix(smatrix_p, r, c);
 
-        //filling neighbours matrix
-        generateNeighbours(smatrix_p, nmatrix_p, r, c);
+        generateGeneration(smatrix_p, nmatrix_p, r, c, 1);
 
-        //showing neighbours matrix
-        printf("neighbours matrix:\n");
-        for(int k = 0; k < r; k++)
-        {
-            for(int l =0 ; l < c; l++)
-            {
-                printf("%d ", nmatrix[k][l]);
-            }
-            printf("\n");
-        }
-        //overwriting states matrix with new generation
-        generateGeneration(smatrix_p, nmatrix_p, r, c);
-
-        //showing new generation matrix
-        printf("new neighbours matrix:\n");
-        for(int m = 0; m < r; m++)
-        {
-            for(int n = 0; n < c; n++)
-            {
-                printf("%d ", smatrix[m][n]);
-            }
-            printf("\n");
-        }
     }
-    system("pause");
+
+    //robi ascii, dzia³a yey!!!
+    char ascii[r][c];
+    char* ascii_p = &ascii[0][0];
+
+    printf("\n\n");
+    convertASCII(smatrix_p, ascii_p, r,c);
+
+
+
+    char nazwafolderu[] = "folderWNero";
+    mkdir(nazwafolderu);
+
+    saveToTxt(ascii_p, r, c, 2, nazwafolderu);
+
+
+
+
     return 0;
 }

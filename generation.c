@@ -1,21 +1,24 @@
 #include <stdio.h>
-#include "rules.h"
 #include "generation.h"
+#include "rules.h"
 
-int countNeighbours (int* states, int r, int c, int x, int y);
+void generateGeneration(int* states, int* neighbours, int r, int c, int n) {
+    int t = 0;
+    while(n-- != 0) {
+        generateNeighbours(states, neighbours, r, c);
+        //printf("=== neighbours matrix #%d ===\n", t);
+        //showMatrix(neighbours, r, c);
+        decideCellsState(states, neighbours, r, c);
+        printf("===== states matrix #%d =====\n", t + 1);
+        showMatrix(states, r, c);
+        t++;
+    }
+}
 
 void generateNeighbours (int* states, int* neighbours, int r, int c) {
     for(int i = 0; i < r; i++) {
         for(int j = 0; j < c; j++) {
             *(neighbours + r * i + j) = countNeighbours(states, r, c, i, j);
-        }
-    }
-}
-
-void generateGeneration(int* states, int* neighbours, int r, int c) {
-    for(int i = 0; i < r; i++) {
-        for(int j = 0; j < c; j++) {
-           *(states + r * i + j)  = decideCellState(states, neighbours, r, c, i, j);
         }
     }
 }
