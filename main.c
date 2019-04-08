@@ -33,7 +33,7 @@ int main(int argc, char** argv)
     int* nmatrix_p = &nmatrix[0][0];
 
     //filling states matrix
-    int fillResult = fillStatesMatrix(inputfilename, smatrix_p, &r, &c);
+    int fillResult = fillStatesMatrix(inputfilename, smatrix_p, r, c);
     //showing states matrix
 
     if (fillResult == 0)

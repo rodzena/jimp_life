@@ -109,7 +109,7 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c)
                 }
                 else
                 {
-                    printf("Line %d is too short. Make sure it contains %d characters.\n", i+1, *c);
+                    printf("Line %d is too short. Make sure it contains %d characters.\n", i+1, c);
                     return 1;
                 }
                  temp = getc(f);
@@ -117,17 +117,17 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c)
             printf("Po skonczeniu %d linii: %d\n",i+1, temp);
             if (temp != '\n' && temp != EOF)
             {
-                printf("Line %d is too long. Make sure it contains %d characters.\n", i+1, *c);
+                printf("Line %d is too long. Make sure it contains %d characters.\n", i+1, c);
                 return 1;
             }
             else if (temp == EOF && i < r -1)
             {
-                printf("Not enough verses. Make sure there are %d verses.\n", *r);
+                printf("Not enough verses. Make sure there are %d verses.\n", r);
                 return 1;
             }
             else if( temp == '\n' && i == r-1)
             {
-                printf("Too many rows. Make sure there are %d of them.\n", *r);
+                printf("Too many rows. Make sure there are %d of them.\n", r);
                 return 1;
             }
             else
