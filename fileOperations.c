@@ -1,9 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<ctype.h>
+#include <string.h>
+#include "fileOperations.h"
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 
-int getSize(char* inputfilename,int* r, int* c)
+
+
+
+
+
+int getSize(char* inputfilename, int* r, int* c)
 {
     FILE* f = fopen(inputfilename, "r");
 
@@ -31,7 +41,7 @@ int getSize(char* inputfilename,int* r, int* c)
 //attempt to read the size only if there aren't any invalid characters
     if( er_count != 0)
     {
-        printf("Error occurred while reading the grid size. \nCharacters: %s are invalid and should not appear in the first line of the file.\n", inv_char);
+        printf("Error occurred while reading the grid size. \nCharacters: %s are invalid and should not appear in the first line of the file. \nMake sure the grid size consists only of integrals.\n", inv_char);
         return 1;
     }
     else
@@ -83,7 +93,7 @@ int getSize(char* inputfilename,int* r, int* c)
     return 0;
 }
 
-int fillStatesMatrix(char*inputfilename, int* matrix, int* r, int *c)
+int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c)
 {
     FILE* f = fopen(inputfilename, "r");
 
@@ -96,9 +106,9 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int* r, int *c)
 
     if ( temp != EOF)
     {
-        for (int i = 0; i < *r; i++)
+        for (int i = 0; i < r; i++)
         {
-            for (int j = 0; j < *c; j++)
+            for (int j = 0; j < c; j++)
             {
                 if ( temp != EOF && temp != '\n')
                 {
@@ -107,25 +117,24 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int* r, int *c)
                 }
                 else
                 {
-                    printf("Line %d is too short. Make sure it contains %d characters.\n", i+1, *c);
+                    printf("Line %d is too short. Make sure it contains %d characters.\n", i+1, c);
                     return 1;
                 }
                  temp = getc(f);
             }
-            printf("Po skonczeniu %d linii: %d\n",i+1, temp);
             if (temp != '\n' && temp != EOF)
             {
-                printf("Line %d is too long. Make sure it contains %d characters.\n", i+1, *c);
+                printf("Line %d is too long. Make sure it contains %d characters.\n", i+1, c);
                 return 1;
             }
-            else if (temp == EOF && i < *r -1)
+            else if (temp == EOF && i < r -1)
             {
-                printf("Not enough verses. Make sure there are %d verses.\n", *r);
+                printf("Not enough verses. Make sure there are %d verses.\n", r);
                 return 1;
             }
-            else if( temp == '\n' && i == *r-1)
+            else if( temp == '\n' && i == r-1)
             {
-                printf("Too many rows. Make sure there are %d of them.\n", *r);
+                printf("Too many rows. Make sure there are %d of them.\n", r);
                 return 1;
             }
             else
@@ -135,78 +144,78 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int* r, int *c)
     return 0;
 }
 
-/*void fillStatesMatrix (char* inputfilename, int* matrix, int* r, int* c)
+//to niby drukuje ale kurcze nie do konca to, co powinno xdd
+void convertASCII (int* matrix_p, char* ascii_p, int r, int c)
 {
-    int c;
-    FILE* f = fopen(inputfilename, "r");
+    printf("===========Current generation===========\n");
+    printf("+");
+    for (int i = 0; i < 2*c +1; i++)
+        printf("-");
+    printf("+\n");
 
-//skip the first line - the size is already loaded
-    do
+    for (int i = 0; i < r; i++)
     {
-        c = getc(f);
-    }
-    while (c != '\n');
-    printf("znak nowego wiersza elko elkooooo %d", '\n' );
-
-
-    c = getc(f);
-
-    for(int i = 0; i < *r; i++)
-    {
-        for(int j = 0; j < *c; j++)
+        printf("| ");
+        for (int j = 0; j < c; j++)
         {
-            while(c != '\n')
-            {
-                c = getc(f);
-                *matrix = c - '0';
-                matrix++;
-            }
+            int
+            c = *(matrix_p + r*i + j);
+            if (c == 0)
+                *(ascii_p + r*i +j) = 'O';
+            else
+                *(ascii_p + r*i +j) = 'X';
+
+               printf("%c ", *(ascii_p + r*i +j));
         }
-        c = getc(f);
-        printf("<<%c>>\n",c);
-        if(c != '\n')
-        {
-            printf("Loaded grid is of incorrect size. Line %d is too long. \nExpected length: %d\n",i+1,*r);
-        }
+        printf("|\n");
     }
-    fclose(f);
+    printf("+");
+    for (int i = 0; i < 2*c +1; i++)
+        printf("-");
+    printf("+\n");
 }
-*/
 
-
-
-
-/*int main(int argc, char** argv)
+int saveToTxt(char* matrix_p, int r, int c, int n, char* nazwafolderu) //n - nr generacji jbkc
 {
-    int r=0;
-    int c=0;
 
-    int result = getSize("test.txt", &r,  &c);
+    char* sciezka = malloc(30* sizeof(char));
 
-    int smatrix[r][c];
-    int* smatrix_p = &smatrix[0][0];
+    sprintf(sciezka, "%s/gen_%d.txt", nazwafolderu,n );
+    FILE *outF = fopen(sciezka,"w");
 
-    if(!result)
-        printf("%d %d\n", r, c);
-
-    fillStatesMatrix ("test.txt", smatrix_p, &r, &c);
+    fprintf(outF,"+");
+    for(int i = 0; i < 2*c + 1 ; i ++)
+        fprintf(outF,"-");
+     fprintf(outF,"+\n");
 
 
-//drukuje macierz 1 - docelowo w innej funkcji
-    for (int i = 0; i<r; i++)
-    {
-        for (int j = 0; j<c; j++)
-        {
-            printf("%d", smatrix[i][j]);
+     for(int i = 0; i < r; i++)
+     {
+        fprintf(outF,"| ");
+         for (int j = 0; j < c; j++)
+         {
+             fprintf(outF, "%c ", *(matrix_p + i*r + j));
+         }
+         fprintf(outF, "|\n");
+     }
+
+     fprintf(outF,"+");
+      for(int i = 0; i < 2*c + 1; i ++)
+        fprintf(outF,"-");
+
+      fprintf(outF,"+");
+
+
+
+return 0;
+}
+
+
+void showMatrix (int* matrix, int r, int c) {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            printf("%d ", *(matrix + i * r + j));
         }
         printf("\n");
-
     }
-
-
-
-
-    return 0;
 }
-*/
-
