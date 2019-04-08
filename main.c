@@ -7,7 +7,7 @@
 
 int main(int argc, char** argv)
 {
-    //readArguments(argc, argv);
+    readArguments(argc, argv);
     printf("Halko odbjur\n");
     //declaring variables
     char inputfilename[] = "test.txt";
@@ -28,15 +28,13 @@ int main(int argc, char** argv)
     //filling states matrix
     int fillResult = fillStatesMatrix(inputfilename, smatrix_p, r, c);
 
-    if (fillResult == 0)
+    /*if (fillResult == 0)
     {
         printf("states matrix read from file:\n");
         showMatrix(smatrix_p, r, c);
-
         generateGeneration(smatrix_p, nmatrix_p, r, c, 10);
-
     }
-    system("pause");
+    system("pause");*/
     return 0;
 }
 
@@ -50,31 +48,18 @@ void showMatrix (int* matrix, int r, int c) {
 }
 
 void readArguments(int argc, char** argv) {
-    //char* a = (char*) malloc(sizeof (char) * 256);
-    for(int i = 1; i < argc; i++) {
-        char* a = argv[i];
-        printf("argument %d: %s\n", i, a);
-        if(*a == 'a') {
-            printf("mode\n");
-        }
-        /*switch (*argument) {
-            case "mode":
-            printf("mode\n");
-            break;
-            /*case ('filename'):
-            printf("filename\n");
-            break;
-            case ('generations'):
-            printf("generations\n");
-            break;
-            case ('present'):
-            printf("present\n");
-            break;
-            case ('exit'):
-            printf("exit\n");
-            break;
-            default:
-            printf("ni mom pojecia co to\n");
-        }*/
+    if(argc != 4) {
+        printf("Please launch the program with precisely three arguments! Exiting program...\n");
+        system("pause");
+        exit(0);
     }
+    //filename[char]
+    char* arg1 = argv[1];
+    printf("Fetching states matrix from %s.\n", arg1);
+    //generations[int]
+    int arg2 = atoi(argv[2]);
+    printf("generating %d generations.\n", arg2);
+    //exitfoldername[]
+    char* arg3= argv[3]; 
+    printf("Saving generations in folder %s.\n", arg3); 
 }
