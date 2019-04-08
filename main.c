@@ -10,15 +10,19 @@
 
 int main(int argc, char** argv)
 {
-    printf("Halko odbjur\n");
+    
     //declaring variables
     char inputfilename[] = "test.txt";
     int r = 0, c = 0;
-    int generations;
-    char* filename;
-    char* exitfolder;
-    readArguments(argc, argv, &filename, &generations, &exitfolder);
 
+    //nie działa, do naprawy:
+    //int generations = 0;
+    //int* pg = &generations;
+    //char* filename = (char*) malloc (sizeof (char) * 40);
+    //char* exitfolder = (char*) malloc (sizeof (char) * 40);
+    //readArguments(argc, argv, filename, pg, exitfolder);
+
+    printf("Halko odbjur\n");
     //reading number of columns and rows from a file
     getSize(inputfilename, &r, &c);
 
@@ -31,13 +35,13 @@ int main(int argc, char** argv)
     //filling states matrix
     int fillResult = fillStatesMatrix(inputfilename, smatrix_p, r, c);
 
-    /*if (fillResult == 0)
+    if (fillResult == 0)
     {
         printf("states matrix read from file:\n");
         showMatrix(smatrix_p, r, c);
         generateGeneration(smatrix_p, nmatrix_p, r, c, 10);
     }
-    system("pause");*/
+    system("pause");
     return 0;
 }
 
@@ -49,21 +53,13 @@ void showMatrix (int* matrix, int r, int c) {
         printf("\n");
     }
 }
-
-void readArguments(int argc, char** argv, char* filename, int* generations, char* exitfoldername) {
+/*
+void readArguments(int argc, char** argv, char* f, int* g, char* e) {
     if(argc != 4) {
-        printf("Please launch the program with precisely three arguments! Exiting program...\n");
+        printf("Please launch the program with three arguments! Exiting program...\n");
         system("pause");
         exit(0);
     }
-    //filename[char]
-    filename = argv[1];
-    printf("Fetching states matrix from %s.\n", argv[1]);
-    //generations[int]
-    generations = atoi(argv[2]);
-    printf("generating %d generations.\n", argv[2]);
-    //exitfoldername[]
-    exitfoldername = argv[3];
-    printf("Saving generations in folder %s.\n", argv[3]); 
-
-}
+    *f = *(argv[1]);
+    printf("f: %s\n", f);
+}*/
