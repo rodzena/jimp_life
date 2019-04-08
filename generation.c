@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "fileOperations.h"
-#include "generation.h"
-#include "rules.h"
+/*#include "fileOperations.h"
+#include "generation.h"*/
+#include "rules.c"
 
 int countNeighbours (int* states, int r, int c, int x, int y);
 
@@ -14,11 +14,7 @@ void generateNeighbours (int* states, int* neighbours, int r, int c) {
 }
 
 void generateGeneration(int* states, int* neighbours, int r, int c) {
-    for(int i = 0; i < r; i++) {
-        for(int j = 0; j < c; j++) {
-           *(states + r * i + j)  = decideCellState(states, neighbours, r, c, i, j);
-        }
-    }
+    decideCellsState(states, neighbours, r, c);
 }
 
 int countNeighbours (int* states, int r, int c, int x, int y) {

@@ -1,1 +1,2 @@
-int decideCellState(int*, int*, int, int, int x, int y);
+int decideCellState(int*, int*, int, int, int, int);
+int decideCellsState(int*, int*, int, int);

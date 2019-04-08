@@ -1,7 +1,14 @@
 #include <stdio.h>
-#include "fileOperations.h"
-#include "generation.h"
-#include "rules.h"
+
+int decideCellState(int* states, int* neighbours, int r, int c, int x, int y);
+
+int decideCellsState(int* states, int* neighbours, int r, int c) {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+           *(states + r * i + j)  = decideCellState(states, neighbours, r, c, i, j);
+        }
+    }
+}
 
 int decideCellState(int* states, int* neighbours, int r, int c, int x, int y) {
     int s = *(states + x * r + y);
