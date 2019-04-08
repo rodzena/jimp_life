@@ -5,19 +5,22 @@
 #include "generation.h"
 #include "main.h"
 
+#include <sys/stat.h>
+#include <sys/types.h>
+
 int main(int argc, char** argv)
 {
-    readArguments(argc, argv);
     printf("Halko odbjur\n");
     //declaring variables
     char inputfilename[] = "test.txt";
     int r = 0, c = 0;
+    int generations;
+    char* filename;
+    char* exitfolder;
+    readArguments(argc, argv, &filename, &generations, &exitfolder);
 
     //reading number of columns and rows from a file
     getSize(inputfilename, &r, &c);
-
-    //printf("r(ows) = %d\n", r);
-    //printf("c(olumns) = %d\n", c);
 
     //creating states and neighbours matrix
     int smatrix[r][c];
@@ -47,19 +50,20 @@ void showMatrix (int* matrix, int r, int c) {
     }
 }
 
-void readArguments(int argc, char** argv) {
+void readArguments(int argc, char** argv, char* filename, int* generations, char* exitfoldername) {
     if(argc != 4) {
         printf("Please launch the program with precisely three arguments! Exiting program...\n");
         system("pause");
         exit(0);
     }
     //filename[char]
-    char* arg1 = argv[1];
-    printf("Fetching states matrix from %s.\n", arg1);
+    filename = argv[1];
+    printf("Fetching states matrix from %s.\n", argv[1]);
     //generations[int]
-    int arg2 = atoi(argv[2]);
-    printf("generating %d generations.\n", arg2);
+    generations = atoi(argv[2]);
+    printf("generating %d generations.\n", argv[2]);
     //exitfoldername[]
-    char* arg3= argv[3]; 
-    printf("Saving generations in folder %s.\n", arg3); 
+    exitfoldername = argv[3];
+    printf("Saving generations in folder %s.\n", argv[3]); 
+
 }
