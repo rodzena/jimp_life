@@ -1,17 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include "fileOperations.c"
-//#include "generation.c"
 #include "rules.h"
 #include "fileOperations.h"
 #include "generation.h"
-
-void readArguments(int argc, char** argv) {
-    printf("siemaa\n");
-    for(int i = 1; i < argc; i++) {
-        printf("argument %d: %s\n", i, argv[i]);
-    }
-}
+#include "main.h"
 
 int main(int argc, char** argv)
 {
@@ -27,7 +19,6 @@ int main(int argc, char** argv)
     printf("r(ows) = %d\n", r);
     printf("c(olumns) = %d\n", c);
 
-
     //creating states and neighbours matrix
     int smatrix[r][c];
     int nmatrix[r][c];
@@ -36,47 +27,31 @@ int main(int argc, char** argv)
 
     //filling states matrix
     int fillResult = fillStatesMatrix(inputfilename, smatrix_p, r, c);
-    //showing states matrix
 
     if (fillResult == 0)
     {
         printf("states matrix read from file:\n");
-        for(int i = 0; i < r; i++)
-        {
-            for(int j =0 ; j < c; j++)
-            {
-                printf("%d ", smatrix[i][j]);
-            }
-            printf("\n");
-        }
+        showMatrix(smatrix_p, r, c);
 
-        //filling neighbours matrix
-        generateNeighbours(smatrix_p, nmatrix_p, r, c);
+        generateGeneration(smatrix_p, nmatrix_p, r, c, 3);
 
-        //showing neighbours matrix
-        printf("neighbours matrix:\n");
-        for(int k = 0; k < r; k++)
-        {
-            for(int l =0 ; l < c; l++)
-            {
-                printf("%d ", nmatrix[k][l]);
-            }
-            printf("\n");
-        }
-        //overwriting states matrix with new generation
-        generateGeneration(smatrix_p, nmatrix_p, r, c);
-
-        //showing new generation matrix
-        printf("new neighbours matrix:\n");
-        for(int m = 0; m < r; m++)
-        {
-            for(int n = 0; n < c; n++)
-            {
-                printf("%d ", smatrix[m][n]);
-            }
-            printf("\n");
-        }
     }
     system("pause");
     return 0;
+}
+
+void showMatrix (int* matrix, int r, int c) {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            printf("%d ", *(matrix + i * r + j));
+        }
+        printf("\n");
+    }
+}
+
+void readArguments(int argc, char** argv) {
+    printf("siemaa\n");
+    for(int i = 1; i < argc; i++) {
+        printf("argument %d: %s\n", i, argv[i]);
+    }
 }
