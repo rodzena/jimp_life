@@ -85,7 +85,7 @@ int getSize(char* inputfilename,int* r, int* c)
     return 0;
 }
 
-int fillStatesMatrix(char*inputfilename, int* matrix, int* r, int *c)
+int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c)
 {
     FILE* f = fopen(inputfilename, "r");
 
@@ -98,9 +98,9 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int* r, int *c)
 
     if ( temp != EOF)
     {
-        for (int i = 0; i < *r; i++)
+        for (int i = 0; i < r; i++)
         {
-            for (int j = 0; j < *c; j++)
+            for (int j = 0; j < c; j++)
             {
                 if ( temp != EOF && temp != '\n')
                 {
@@ -120,12 +120,12 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int* r, int *c)
                 printf("Line %d is too long. Make sure it contains %d characters.\n", i+1, *c);
                 return 1;
             }
-            else if (temp == EOF && i < *r -1)
+            else if (temp == EOF && i < r -1)
             {
                 printf("Not enough verses. Make sure there are %d verses.\n", *r);
                 return 1;
             }
-            else if( temp == '\n' && i == *r-1)
+            else if( temp == '\n' && i == r-1)
             {
                 printf("Too many rows. Make sure there are %d of them.\n", *r);
                 return 1;
