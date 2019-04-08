@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "rules.h"
 
 int decideCellState(int* states, int* neighbours, int r, int c, int x, int y);
 

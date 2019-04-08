@@ -1,19 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "fileOperations.c"
-#include "generation.c"
+//#include "fileOperations.c"
+//#include "generation.c"
 #include "rules.h"
-/*#include "fileOperations.h"
+#include "fileOperations.h"
 #include "generation.h"
-#include "rules.h"*/
 
-/*void readArguments(int argc, char** argv) {
+void readArguments(int argc, char** argv) {
     printf("siemaa\n");
-}*/
+    for(int i = 1; i < argc; i++) {
+        printf("argument %d: %s\n", i, argv[i]);
+    }
+}
 
 int main(int argc, char** argv)
 {
-    //readArguments(argc, argv);
+    readArguments(argc, argv);
     printf("Halko odbjur\n");
     //declaring variables
     char inputfilename[] = "test.txt";

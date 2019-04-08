@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-/*#include "fileOperations.h"
-#include "generation.h"
+#include "fileOperations.h"
+/*#include "generation.h"
 #include "rules.h"*/
 
 int getSize(char* inputfilename,int* r, int* c)
