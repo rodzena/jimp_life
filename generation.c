@@ -1,6 +1,7 @@
 #include <stdio.h>
-#include "rules.h"
+#include "fileOperations.h"
 #include "generation.h"
+#include "rules.h"
 
 int countNeighbours (int* states, int r, int c, int x, int y);
 

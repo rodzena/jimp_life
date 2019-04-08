@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include "fileOperations.h"
+#include "generation.h"
 #include "rules.h"
 
 int decideCellState(int* states, int* neighbours, int r, int c, int x, int y) {

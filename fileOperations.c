@@ -1,18 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include<ctype.h>
-
+#include <ctype.h>
+#include "fileOperations.h"
+#include "generation.h"
+#include "rules.h"
 
 int getSize(char* inputfilename,int* r, int* c)
 {
     FILE* f = fopen(inputfilename, "r");
 
-    char* temp_rows = malloc ( 10*sizeof (temp_rows) );
-    char* temp_columns = malloc ( 10*sizeof (temp_columns) );
+    char* temp_rows = (char*) malloc ( 10*sizeof (temp_rows) );
+    char* temp_columns = (char*) malloc ( 10*sizeof (temp_columns) );
 
     int i = 0;
     int er_count = 0;
-    char* inv_char = malloc (5*sizeof inv_char);                //lokuje na wartosc; czy er_count => rozmiartablicy; inv_char realloc(inv_char, 2*er_count*sizeof char)
+    char* inv_char = (char*) malloc (5*sizeof inv_char);                //lokuje na wartosc; czy er_count => rozmiartablicy; inv_char realloc(inv_char, 2*er_count*sizeof char)
     int temp = getc(f);
 
 //check the validity of the characters in the first line

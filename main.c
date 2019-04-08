@@ -4,7 +4,6 @@
 #include "generation.h"
 #include "rules.h"
 
-
 int main()
 {
     printf("Halko odbjur\n");
