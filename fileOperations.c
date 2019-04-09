@@ -102,7 +102,13 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c)
     while (temp != '\n' && temp != EOF)
         temp = getc(f);
 
+    if(temp!= EOF)
     temp = getc(f);
+    else
+    {
+        printf("No grid!\n");
+        return 1;
+    }
 
     if ( temp != EOF)
     {
@@ -144,10 +150,10 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c)
     return 0;
 }
 
-//to niby drukuje ale kurcze nie do konca to, co powinno xdd
+
 void convertASCII (int* matrix_p, char* ascii_p, int r, int c)
 {
-    printf("===========Current generation===========\n");
+    //printf("===========Current generation===========\n");
     printf("+");
     for (int i = 0; i < 2*c +1; i++)
         printf("-");
@@ -175,13 +181,13 @@ void convertASCII (int* matrix_p, char* ascii_p, int r, int c)
     printf("+\n");
 }
 
-int saveToTxt(char* matrix_p, int r, int c, int n, char* nazwafolderu) //n - nr generacji jbkc
+int saveToTxt(char* matrix_p, int r, int c, int n, char* folderName) //n - nr generacji jbkc
 {
 
-    char* sciezka = malloc(30* sizeof(char));
+    char* path = malloc(30* sizeof(char));
 
-    sprintf(sciezka, "%s/gen_%d.txt", nazwafolderu,n );
-    FILE *outF = fopen(sciezka,"w");
+    sprintf(path, "%s/gen_%d.txt", folderName,n );
+    FILE *outF = fopen(path,"w");
 
     fprintf(outF,"+");
     for(int i = 0; i < 2*c + 1 ; i ++)
@@ -217,5 +223,24 @@ void showMatrix (int* matrix, int r, int c) {
             printf("%d ", *(matrix + i * r + j));
         }
         printf("\n");
+    }
+}
+
+void saveFinalGrid(int* matrix, int r, int c, char* folderName)
+{
+
+    char* path = malloc(30* sizeof(char));
+
+    sprintf(path, "%s/final_grid.txt", folderName);
+    FILE *outF = fopen(path,"w");
+
+    fprintf(outF, "%d %d\n",r,c);
+    for(int i = 0; i<r; i++)
+    {
+        for (int j = 0; j<c; j++)
+        {
+            fprintf(outF, "%d",*(matrix + r*i + j));
+        }
+            fprintf(outF, "\n");
     }
 }
