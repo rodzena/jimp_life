@@ -38,6 +38,7 @@ int main(int argc, char** argv)
         //int nmatrix[r][c];
         int* nmatrix_p = (int*)malloc(10000*sizeof(int));
 
+
         //int* nmatrix_p = &nmatrix[0][0];
         char ascii[r][c];
         char* ascii_p = &ascii[0][0];
