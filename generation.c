@@ -4,11 +4,11 @@
 #include "fileOperations.h"
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <windows.h>
 
 
-void generateGeneration(int* states, int* neighbours, int r, int c, int genNumber, char* ascii_p, char* folderName, int pause) {
+void generateGeneration(int* states, int* neighbours, int r, int c, int genNumber, char* ascii_p, char* folderName) {
     int t = 0;
+    int genQuantity = genNumber;
     while(genNumber-- != 0) {
         generateNeighbours(states, neighbours, r, c);
         decideCellsState(states, neighbours, r, c);
@@ -16,12 +16,7 @@ void generateGeneration(int* states, int* neighbours, int r, int c, int genNumbe
         //showMatrix(states, r, c);
         convertASCII(states, ascii_p, r,c);
         printf("\n\n\n");
-        saveToTxt(ascii_p, r, c, t+1, folderName);
-        if (pause == 1)
-            system("pause");
-        else
-            Sleep(1000);
-        system("cls");
+        saveToTxt(ascii_p, r, c, genQuantity - genNumber, folderName);
 
         t++;
     }
