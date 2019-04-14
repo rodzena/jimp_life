@@ -1,19 +1,27 @@
 #include <stdio.h>
 #include "generation.h"
 #include "rules.h"
-#include "main.h"
+#include "fileOperations.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 
-void generateGeneration(int* states, int* neighbours, int r, int c, int n) {
+
+void generateGeneration(int* states, int* neighbours, int r, int c, int genNumber, char* ascii_p, char* folderName) {
     int t = 0;
-    while(n-- != 0) {
+    int genQuantity = genNumber;
+    while(genNumber-- != 0) {
         generateNeighbours(states, neighbours, r, c);
-        //printf("=== neighbours matrix #%d ===\n", t);
-        //showMatrix(neighbours, r, c);
         decideCellsState(states, neighbours, r, c);
-        printf("===== states matrix #%d =====\n", t + 1);
-        showMatrix(states, r, c);
+        printf("======== Generation #%d ========\n\n\n", t + 1);
+        //showMatrix(states, r, c);
+        convertASCII(states, ascii_p, r,c);
+        printf("\n\n\n");
+        saveToTxt(ascii_p, r, c, genQuantity - genNumber, folderName);
+
         t++;
     }
+
+    //saveToTxt(states, r, c, 000, folderName );
 }
 
 void generateNeighbours (int* states, int* neighbours, int r, int c) {
