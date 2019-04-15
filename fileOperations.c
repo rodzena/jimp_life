@@ -14,7 +14,7 @@ int getSize(char* inputfilename, int* r, int* c) {
 		return -1;
 	}
 
-	char* temp_rows = (char*)malloc ( 10*sizeof (temp_rows) );
+	char* temp_rows = (char*)malloc ( 10*sizeof (temp_rows));
 	char* temp_columns = (char*)malloc ( 10*sizeof (temp_columns) );
 
 	int i = 0;
@@ -51,16 +51,21 @@ int getSize(char* inputfilename, int* r, int* c) {
 		i=0;
 		
 		//saves digits of row numbers to temporary string
+		if (temp == EOF){
+			printf("File \"%s\" is empty!\n", inputfilename);
+			return 1;
+		}
+
 		while(temp >= '0' && temp <= '9') {
 			temp_rows[i] = temp;
 			i++;
 			temp = getc(f);
 		}
-		char* end;
-		//*r = strtol(temp_rows,&end,10);
-		*r = atoi(temp_rows);
+		char** end = (char**)malloc(10 * sizeof(char));
+		*r = strtol(temp_rows,end,10);
+		//*r = atoi(temp_rows);
 		free(temp_rows);
-		//skips spaces
+
 		while(isspace(temp))
 			temp = getc(f);
 		i=0;
@@ -70,9 +75,10 @@ int getSize(char* inputfilename, int* r, int* c) {
 			i++;
 			temp = getc(f);
 		}
-		//*c = strtol(temp_columns,&end,10);
-		*c = atoi(temp_columns);
+		*c = strtol(temp_columns,end,10);
+		//*c = atoi(temp_columns);
 		free(temp_columns);
+		free(end);
 
 		//skips spaces
 		while(isspace(temp)&& temp != '\n')

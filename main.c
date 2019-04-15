@@ -14,9 +14,24 @@ int main(int argc, char** argv) {
         return(1);
     }
     else{
-
+    char **p= (char**)calloc(10, sizeof(char));
+    int x = strtol(argv[2] , p, 10); 
     int  genNumber = atoi(argv[2]);
+    int i = 0;
+    while(**p != '\0')
+    {
+	    if (**p == '0')
+	    {
+		    p++;
+	    }
+	    else
+	    {
+	   	 printf("Incorrect number of generations.\n");
+	   	 return 1;
+	    }
+    }	
 
+    free(p);
     //creates folder for output
     mkdir(argv[3],0700);
 
@@ -40,7 +55,6 @@ int main(int argc, char** argv) {
 
     //filling states matrix
     int fillResult = fillStatesMatrix(argv[1], smatrix_p, r, c);
-
 
     //if no errors occurred while filling the matrix, generate all the descendants
     if (fillResult == 0 && sizeResult==0 ) {
