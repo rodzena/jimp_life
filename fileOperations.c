@@ -9,13 +9,17 @@
 
 int getSize(char* inputfilename, int* r, int* c) {
 	FILE* f = fopen(inputfilename, "r");
+	if( f == NULL){
+		printf("File \"%s\" could not be open.\n", inputfilename);
+		return -1;
+	}
 
-	char* temp_rows = malloc ( 10*sizeof (temp_rows) );
-	char* temp_columns = malloc ( 10*sizeof (temp_columns) );
+	char* temp_rows = (char*)malloc ( 10*sizeof (temp_rows));
+	char* temp_columns = (char*)malloc ( 10*sizeof (temp_columns) );
 
 	int i = 0;
 	int er_count = 0;
-	char* inv_char = malloc (5*sizeof inv_char);                //lokuje na wartosc; czy er_count => rozmiartablicy; inv_char realloc(inv_char, 2*er_count*sizeof char)
+	char* inv_char = (char*)malloc (5*sizeof inv_char);          //allocates memory for invalid characters array
 	int temp = getc(f);
 
 	//check the validity of the characters in the first line
@@ -28,25 +32,40 @@ int getSize(char* inputfilename, int* r, int* c) {
 	}
 	inv_char[er_count] = '\0';
 	rewind(f);
+	free(inv_char);
 
 	//attempt to read the size only if there aren't any invalid characters
 	if( er_count != 0) {
-		printf("Error occurred while reading the grid size. \nCharacters: %s are invalid and should not appear in the first line of the file. \nMake sure the grid size consists only of integrals.\n", inv_char);
+		printf("Error occurred while reading the grid size. \nCharacters: %s" 
+			"are invalid and should not appear in the first line of the file. \n"
+			"Make sure the grid size consists only of integrals.\n", inv_char);
+
 		return 1;
-	} else {
+	} 
+	else {
+		
 		temp = getc(f);
 		//skips spaces
 		while(isspace(temp))
 			temp = getc(f);
 		i=0;
+		
 		//saves digits of row numbers to temporary string
+		if (temp == EOF){
+			printf("File \"%s\" is empty!\n", inputfilename);
+			return 1;
+		}
+
 		while(temp >= '0' && temp <= '9') {
 			temp_rows[i] = temp;
 			i++;
 			temp = getc(f);
 		}
-		*r = atoi(temp_rows);
-		//skips spaces
+		char** end = (char**)malloc(10 * sizeof(char));
+		*r = strtol(temp_rows,end,10);
+		//*r = atoi(temp_rows);
+		free(temp_rows);
+
 		while(isspace(temp))
 			temp = getc(f);
 		i=0;
@@ -56,7 +75,10 @@ int getSize(char* inputfilename, int* r, int* c) {
 			i++;
 			temp = getc(f);
 		}
-		*c = atoi(temp_columns);
+		*c = strtol(temp_columns,end,10);
+		//*c = atoi(temp_columns);
+		free(temp_columns);
+		free(end);
 
 		//skips spaces
 		while(isspace(temp)&& temp != '\n')
@@ -64,14 +86,17 @@ int getSize(char* inputfilename, int* r, int* c) {
 
 		//checks if there are any numbers after the spaces following the column number
 		if ( temp == '\n' || temp == EOF)
+		{
+			fclose(f);
 			return 0;
+		}
 		else {
 			printf("Size of grid is not specified correctly. Edit the file to contain 2 numbers.\n");
+			fclose(f);
 			return 1;
 		}
 	}
-	fclose(f);
-	return 0;
+	
 }
 
 int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c) {
@@ -82,7 +107,7 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c) {
 	temp = getc(f);
 	while(temp != EOF) {
 		if (temp != '0' && temp != '1' && temp != '\n') {
-			printf("Incorrect cell state in grid. Temp = [%d]\n", temp);
+			fclose(f);
 			return 1;
 		} else {
 			temp = getc(f);
@@ -100,9 +125,11 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c) {
 		temp = getc(f);
 		if (temp != EOF)
 		{
-			for (int i = 0; i < r; i++)
+			int i = 0, j = 0;
+
+			for (i = 0; i < r; i++)
 			{
-				for (int j = 0; j < c; j++)
+				for (j = 0; j < c; j++)
 				{
 					if ( temp != EOF && temp != '\n')
 					{
@@ -111,30 +138,32 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c) {
 					}
 					else
 					{
-						printf("Incorrect size of grid. Make sure it is %dx%d", r,c); 
-						//printf("Line %d is too short. Make sure it contains %d characters.\n", i+1, c);
+						printf("Incorrect size of grid. Make sure it is %dx%d\n", r,c); 
+						fclose(f);
 						return 1;
 					}
 					temp = getc(f);
 				}
-				if (temp != '\n' && temp != EOF)
+				if (temp != '\n' && temp != EOF || temp == EOF && i < r-1 )
 				{
-					printf("Incorrect size of grid. Make sure it is %dx%d", r,c);
+					printf("Incorrect size of grid. Make sure it is %dx%d\n", r,c);
+					fclose(f);
 					return 1;
 				}
-				else if (temp == EOF && i < r -1)
-				{
-					printf("Not enough verses. Make sure there are %d verses.\n", r);
-					return 1;
-				}
+
 				else if( temp == '\n' && i == (r-1))
 				{
 					temp = getc(f);
-					if(temp == EOF)
+
+					if(temp == EOF){
+						fclose(f);
 						return 0;
+					}
+					
 					else 
 					{
-						printf("Too many rows. Make sure there are %d of them.\n", r);
+						printf("Incorrect size of grid. Make sure it is %dx%d\n", r, c);
+						fclose(f);
 						return 1;
 					}
 				}
@@ -144,18 +173,12 @@ int fillStatesMatrix(char*inputfilename, int* matrix, int r, int c) {
 			}
 		}
 	}
-	return 0;
 }
 
 
 void convertASCII (int* matrix_p, char* ascii_p, int r, int c)
 {
-	//printf("===========Current generation===========\n");
 	printf("+");
-	for (int i = 0; i < 2*c +1; i++)
-		printf("-");
-	printf("+\n");
-
 	for (int i = 0; i < r; i++)
 	{
 		printf("| ");
@@ -177,10 +200,10 @@ void convertASCII (int* matrix_p, char* ascii_p, int r, int c)
 	printf("+\n");
 }
 
-int saveToTxt(char* matrix_p, int r, int c, int n, char* folderName) //n - nr generacji jbkc
+int saveToTxt(char* matrix_p, int r, int c, int n, char* folderName) 
 {
 
-	char* path = malloc(30* sizeof(char));
+	char* path = (char*)malloc(30* sizeof(char));
 
 	sprintf(path, "%s/gen_%d.txt", folderName,n );
 	FILE *outF = fopen(path,"w");
@@ -205,11 +228,13 @@ int saveToTxt(char* matrix_p, int r, int c, int n, char* folderName) //n - nr ge
 		for(int i = 0; i < 2*c + 1; i ++)
 			fprintf(outF,"-");
 				
-				fprintf(outF,"+");
+	fprintf(outF,"+");
+	free(path);
+	fclose(outF);
 				
 				
 				
-				return 0;
+	return 0;
 }
 
 
@@ -239,4 +264,6 @@ void saveFinalGrid(int* matrix, int r, int c, char* folderName)
 			}
 			fprintf(outF, "\n");
 		}
+		fclose(outF);
+		free(path);
 }
